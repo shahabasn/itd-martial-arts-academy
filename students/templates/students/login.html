@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/static/images/icon.png">
+<link
+rel="manifest"
+href="/static/manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – ITD Martial Arts Academy (Kadappadi)</title>
+  <link rel="apple-touch-icon" href="/static/images/icon.png">
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #C0392B;
+      --red-dark: #922B21;
+      --red-light: #FADBD8;
+      --gold: #D4AC0D;
+      --gold-light: #FEF9E7;
+      --black: #1A1A1A;
+      --surface: #FFFFFF;
+      --bg: #F7F5F0;
+      --border: #E8E2D9;
+      --text-main: #1A1A1A;
+      --text-muted: #7B7166;
+      --radius: 14px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header (matches main page) ── */
+    .site-header {
+      background: var(--black);
+      padding: 0 1.25rem;
+      display: flex;
+      align-items: center;
+      height: 60px;
+    }
+
+    .site-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .site-header .belt-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .site-header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.04em;
+    }
+
+    .site-header h1 span { color: var(--gold); }
+
+    /* ── Page layout ── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    /* ── Login card ── */
+    .login-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.75rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    /* Card top accent bar */
+    .login-card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: var(--red);
+      border-radius: var(--radius) var(--radius) 0 0;
+      margin: -2rem -1.75rem 1.75rem;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: var(--red-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.25rem;
+    }
+
+    .card-icon svg { width: 26px; height: 26px; }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text-main);
+      margin-bottom: 0.3rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── Form fields ── */
+    .field-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .field-group input[type="text"],
+    .field-group input[type="password"],
+    .field-group input[type="email"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .field-group input:focus {
+      border-color: var(--red);
+      background: #fff;
+    }
+
+    /* Django auto-generated <p> wrappers */
+    .django-form p {
+      margin-bottom: 1.1rem;
+    }
+
+    .django-form p label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .django-form p input[type="text"],
+    .django-form p input[type="password"],
+    .django-form p input[type="email"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-main);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+
+    .django-form p input:focus {
+      border-color: var(--red);
+      background: #fff;
+    }
+
+    /* Error messages */
+    .django-form .errorlist {
+      list-style: none;
+      margin: 4px 0 0;
+      padding: 0;
+    }
+
+    .django-form .errorlist li {
+      font-size: 0.8rem;
+      color: var(--red);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      width: 100%;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .submit-btn:hover { background: var(--red-dark); }
+    .submit-btn:active { transform: scale(0.99); }
+
+    /* ── Footer note ── */
+    .card-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-footer span {
+      color: var(--gold);
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+    }
+
+    /* ── Responsive ── */
+    @media (min-width: 600px) {
+      .site-header h1 { font-size: 1.2rem; }
+      .login-card { padding: 2.25rem 2.25rem; }
+      .login-card::before { margin: -2.25rem -2.25rem 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (same as main page) -->
+  <header class="site-header">
+    <div class="brand">
+      <img src="/static/images/icon.png" class="belt-icon" alt="Logo" style="object-fit: contain; border-radius: 6px; box-shadow: 0 2px 8px rgba(212, 172, 13, 0.45);">
+      <h1>ITD Martial Arts <span>Academy (Kadappadi)</span></h1>
+    </div>
+  </header>
+
+  <!-- Centered login card -->
+  <div class="page-body">
+    <div class="login-card">
+
+      <!-- Icon -->
+      <div class="card-icon" style="background: none; width: 64px; height: 64px; margin-bottom: 1.5rem;">
+        <img src="/static/images/icon.png" alt="Logo" style="width: 64px; height: 64px; object-fit: contain; border-radius: 12px; box-shadow: 0 4px 15px rgba(192, 57, 43, 0.35);">
+      </div>
+
+      <h2 class="card-title">Welcome</h2>
+      <p class="card-subtitle">Sign in account</p>
+
+      <!-- Django login form -->
+      <form method="POST" class="django-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="submit-btn">LOGIN</button>
+      </form>
+
+      <div class="card-footer">
+        <span>ITD Martial Arts Academy (Kadappadi)</span> &nbsp;·&nbsp;
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="icon" href="/static/images/icon.png">
+<link
+rel="manifest"
+href="/static/manifest.json">
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITD Martial Arts Academy (Kadappadi)</title>
+  <link rel="apple-touch-icon" href="/static/images/icon.png">
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #C0392B;
+      --red-dark: #922B21;
+      --red-light: #FADBD8;
+      --gold: #D4AC0D;
+      --gold-light: #FEF9E7;
+      --black: #1A1A1A;
+      --surface: #FFFFFF;
+      --bg: #F7F5F0;
+      --border: #E8E2D9;
+      --text-main: #1A1A1A;
+      --text-muted: #7B7166;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--black);
+      padding: 0 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .site-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .site-header .belt-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .site-header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.04em;
+    }
+
+    .site-header h1 span {
+      color: var(--gold);
+    }
+
+    .logout-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #AAAAAA;
+      background: none;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover { color: #fff; border-color: #666; }
+
+    /* ── Search Bar ── */
+    .search-section {
+      background: var(--black);
+      padding: 0 1.25rem 1.25rem;
+    }
+
+    .search-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-form input {
+      flex: 1;
+      background: #2A2A2A;
+      border: 1px solid #3A3A3A;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-form input::placeholder { color: #666; }
+    .search-form input:focus { border-color: var(--red); }
+
+    .search-form button {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-form button:hover { background: var(--red-dark); }
+
+    /* ── Nav Pills ── */
+    .nav-section {
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .nav-section::-webkit-scrollbar { display: none; }
+
+    .nav-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-main);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .nav-pill:hover { background: var(--red); color: #fff; border-color: var(--red); }
+    .nav-pill.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+    /* ── Section Title ── */
+    .section-head {
+      padding: 0.5rem 1.25rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-head h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .student-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+
+    /* ── Student Cards ── */
+    .cards-list {
+      padding: 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 2rem;
+    }
+
+    .student-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .student-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--belt-color, var(--border));
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+
+    .student-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    /* Belt accent colors */
+    .belt-white { --belt-color: #E0E0E0; }
+    .belt-yellow { --belt-color: #F4D03F; }
+    .belt-orange { --belt-color: #E67E22; }
+    .belt-green { --belt-color: #27AE60; }
+    .belt-blue { --belt-color: #2980B9; }
+    .belt-purple { --belt-color: #8E44AD; }
+    .belt-brown { --belt-color: #795548; }
+    .belt-red { --belt-color: #C0392B; }
+    .belt-black { --belt-color: #1A1A1A; }
+
+    /* Photo / Avatar */
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--bg);
+      border: 2px solid var(--border);
+    }
+
+    .avatar-initials {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--red-light);
+      color: var(--red-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    /* Card info */
+    .card-info { flex: 1; min-width: 0; }
+
+    .card-info .name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+
+    .meta-chip svg { width: 11px; height: 11px; }
+
+    .belt-badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 50px;
+      background: var(--gold-light);
+      color: #7D6608;
+      border: 1px solid #F0D060;
+    }
+
+    .card-arrow {
+      color: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg { opacity: 0.3; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── Responsive: tablet+ ── */
+    @media (min-width: 600px) {
+      .site-header h1 { font-size: 1.2rem; }
+
+      .cards-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .student-card { flex-direction: column; align-items: flex-start; }
+      .student-card::before { top: 0; left: 0; right: 0; bottom: auto; width: auto; height: 4px; border-radius: var(--radius) var(--radius) 0 0; }
+      .card-arrow { display: none; }
+      .avatar, .avatar-initials { width: 48px; height: 48px; }
+    }
+
+    @media (min-width: 960px) {
+      .cards-list { grid-template-columns: repeat(3, 1fr); }
+      .nav-section { padding: 1.25rem 2rem; }
+      .cards-list { padding: 0 2rem 2rem; }
+      .search-section { padding: 0 2rem 1.25rem; }
+      .site-header { padding: 0 2rem; }
+      .section-head { padding: 0.5rem 2rem 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="brand">
+      <img src="/static/images/icon.png" class="belt-icon" alt="Logo" style="object-fit: contain; border-radius: 6px; box-shadow: 0 2px 8px rgba(212, 172, 13, 0.45);">
+      <h1>ITD Martial Arts <span>Academy (Kadappadi)</span></h1>
+    </div>
+   <form
+method="POST"
+action="/logout/"
+onsubmit="return confirm('Logout?')"
+style="display:inline;">
+
+    {% csrf_token %}
+
+    <button type="submit" class="logout-btn" style="cursor: pointer;">
+        Logout
+    </button>
+
+  </form>
+  </header>
+
+  <!-- Search -->
+  <div class="search-section">
+    <form method="GET" class="search-form">
+      <input type="text" name="q" placeholder="Search student by name…" autocomplete="off">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+
+  <!-- Navigation Pills -->
+  <nav class="nav-section" aria-label="Main navigation">
+    <a href="/students/" class="nav-pill active">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="2.5"/><path d="M3 13c0-3 2-5 5-5s5 2 5 5"/></svg>
+      All Students
+    </a>
+    <a href="/add-student/" class="nav-pill">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="5" r="2.5"/><path d="M2 13c0-3 1.8-5 5-5"/><path d="M12 10v4M10 12h4"/></svg>
+      Add Student
+    </a>
+    <a href="/fee-pending/" class="nav-pill">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="10" rx="1.5"/><path d="M5 7h4M5 10h6"/></svg>
+      Fee Pending
+    </a>
+    <a href="/batches/" class="nav-pill">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 5l6-3 6 3-6 3-6-3zM2 9l6 3 6-3M2 12l6 3 6-3"/></svg>
+      Batches
+    </a>
+    <a href="/fee-packages/" class="nav-pill">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2l1.5 3.5L13 6l-2.5 2.5.5 3.5L8 10.5 5 12l.5-3.5L3 6l3.5-.5L8 2z"/></svg>
+      Packages
+    </a>
+  </nav>
+
+  <!-- Student List -->
+  <div class="section-head">
+    <h2>Students</h2>
+    {% if students %}
+    <span class="student-count">{{ students|length }} enrolled</span>
+    {% endif %}
+  </div>
+
+  <div class="cards-list">
+    {% for student in students %}
+
+      {# Determine belt color class #}
+      {% with belt_lower=student.belt|lower %}
+      <div class="student-card
+        {% if 'black' in belt_lower %}belt-black
+        {% elif 'brown' in belt_lower %}belt-brown
+        {% elif 'red' in belt_lower %}belt-red
+        {% elif 'purple' in belt_lower %}belt-purple
+        {% elif 'blue' in belt_lower %}belt-blue
+        {% elif 'green' in belt_lower %}belt-green
+        {% elif 'orange' in belt_lower %}belt-orange
+        {% elif 'yellow' in belt_lower %}belt-yellow
+        {% else %}belt-white{% endif %}">
+
+        {% if student.photo %}
+          <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="avatar">
+        {% else %}
+          <div class="avatar-initials" aria-hidden="true">
+            {{ student.name|first|upper }}
+          </div>
+        {% endif %}
+
+        <div class="card-info">
+          <p class="name">{{ student.name }}</p>
+          <div class="card-meta">
+            <span class="meta-chip">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM1.5 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg>
+              {{ student.phone }}
+            </span>
+            {% if student.parent_name %}
+            <span class="meta-chip">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM1.5 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg>
+              Parent: {{ student.parent_name }}
+            </span>
+            {% endif %}
+            <span class="meta-chip">
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="10" height="8" rx="1"/><path d="M4 5h4M4 7.5h2"/></svg>
+              {{ student.batch }}
+            </span>
+            <span class="belt-badge">{{ student.belt }}</span>
+          </div>
+        </div>
+
+        <svg class="card-arrow" viewBox="0 0 8 14" fill="none" width="8" height="14">
+          <path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+
+      </div>
+      {% endwith %}
+
+    {% empty %}
+      <div class="empty-state" style="grid-column: 1/-1;">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="24" r="12" stroke="#1A1A1A" stroke-width="2"/>
+          <path d="M10 56c0-12 10-20 22-20s22 8 22 20" stroke="#1A1A1A" stroke-width="2"/>
+        </svg>
+        <p>No students found.</p>
+      </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>

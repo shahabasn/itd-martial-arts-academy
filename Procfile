@@ -1,0 +1,1 @@
+web: gunicorn karate_backend.wsgi
