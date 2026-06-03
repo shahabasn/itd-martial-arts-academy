@@ -338,6 +338,52 @@ href="/static/manifest.json">
     .empty-add-btn:hover { background: var(--gold-dark); }
     .empty-add-btn svg { width: 16px; height: 16px; }
 
+    @media (max-width: 480px) {
+      .site-header {
+        padding: 0 0.75rem;
+        height: 60px;
+      }
+      .site-header h1, .brand h1, .brand-title {
+        font-size: 0.8rem !important;
+      }
+      .site-header h1 span, .brand h1 span, .brand-title span {
+        font-size: 0.65rem;
+        display: block;
+        margin-top: 1px;
+      }
+      .logout-btn, .back-btn {
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+      }
+      .search-section, .toolbar {
+        padding: 0 0.75rem 0.75rem !important;
+      }
+      .nav-section {
+        padding: 0.75rem 0.75rem !important;
+        gap: 6px !important;
+      }
+      .nav-pill {
+        padding: 6px 12px !important;
+        font-size: 0.75rem !important;
+      }
+      .section-head {
+        padding: 0.5rem 0.75rem 0.5rem !important;
+      }
+      .cards-list {
+        padding: 0 0.75rem 1.5rem !important;
+        gap: 10px !important;
+      }
+      .card-body {
+        padding: 0.85rem 0.85rem 0.85rem 1rem !important;
+        gap: 10px !important;
+      }
+      .avatar, .avatar-initials {
+        width: 48px !important;
+        height: 48px !important;
+        font-size: 1.1rem !important;
+      }
+    }
+
     /* ── Responsive ── */
     @media (min-width: 600px) {
       .cards-list {
@@ -427,8 +473,15 @@ href="/static/manifest.json">
               </svg>
               {{ batch.timing }}
             </span>
+            {% if batch.class_days %}
+            <span class="time-chip" style="margin-top: 4px; background-color: #EBF5FB; border-color: #AED6F1; color: #1B4F72;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 12px; height: 12px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              {{ batch.class_days }}
+            </span>
+            {% endif %}
           </div>
         </div>
+
 
         <div class="card-actions">
           <a href="/batch-details/{{ batch.id }}/" class="action-btn view">

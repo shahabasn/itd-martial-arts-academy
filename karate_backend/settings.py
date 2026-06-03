@@ -13,6 +13,13 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import socket
+
+# Force Python socket to resolve to IPv4 only (bypasses Render IPv6 outbound connection issues with Supabase)
+orig_getaddrinfo = socket.getaddrinfo
+def getaddrinfo_ipv4_only(host, port, family=0, type=0, proto=0, flags=0):
+    return orig_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
+socket.getaddrinfo = getaddrinfo_ipv4_only
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,15 +89,29 @@ WSGI_APPLICATION = 'karate_backend.wsgi.application'
 
 
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get(
-            'DATABASE_URL',
-            f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
-        ),
-        conn_max_age=600
-    )
-}
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    }
+    # Resolve host to IPv4 to prevent psycopg2 (libpq) from resolving to IPv6 on Render
+    try:
+        db_host = DATABASES['default'].get('HOST')
+        if db_host:
+            ipv4_address = socket.gethostbyname(db_host)
+            if 'OPTIONS' not in DATABASES['default']:
+                DATABASES['default']['OPTIONS'] = {}
+            DATABASES['default']['OPTIONS']['hostaddr'] = ipv4_address
+    except Exception as e:
+        print(f"Failed to resolve database hostname to IPv4: {e}")
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 
 # Password validation
@@ -137,16 +158,13 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-from whitenoise.storage import CompressedStaticFilesStorage
+from django.contrib.staticfiles.storage import StaticFilesStorage
 
-class CustomStaticFilesStorage(CompressedStaticFilesStorage):
+class CustomStaticFilesStorage(StaticFilesStorage):
     pass
 
 # Storage definitions with local fallback
 if os.environ.get('CLOUDINARY_CLOUD_NAME'):
-    STATICFILES_STORAGE = 'karate_backend.settings.CustomStaticFilesStorage'
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-    
     CLOUDINARY_STORAGE = {
         'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
         'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
@@ -161,8 +179,6 @@ if os.environ.get('CLOUDINARY_CLOUD_NAME'):
         },
     }
 else:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
     STORAGES = {
         "default": {
             "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -171,6 +187,7 @@ else:
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -193,5 +210,30 @@ else:
         "http://127.0.0.1:8000",
     ]
 
+# Filter out invalid origins to prevent Django system check errors (e.g. if '*' is set)
+CSRF_TRUSTED_ORIGINS = [origin for origin in CSRF_TRUSTED_ORIGINS if origin.startswith("http://") or origin.startswith("https://")]
+
 SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'True') == 'True'
 CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'True') == 'True'
+
+# Logging configuration to output tracebacks to the console in production
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}

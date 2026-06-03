@@ -1,0 +1,28 @@
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases
+*.sqlite3
+db.sqlite3
+
+# Media uploads
+media/
+karate-management/backend/media/
+
+# Static collected
+staticfiles/
+karate-management/backend/staticfiles/
+
+# IDE / OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

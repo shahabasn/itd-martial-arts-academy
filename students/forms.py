@@ -4,7 +4,8 @@ from .models import (
     Student,
     Batch,
     FeePackage,
-    Staff
+    Staff,
+    FeePayment
 )
 
 
@@ -69,3 +70,36 @@ class FeePackageForm(forms.ModelForm):
         model = FeePackage
 
         fields = '__all__'
+
+
+class FeePaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = FeePayment
+        fields = ['package', 'amount', 'paid_date', 'fee_start_date']
+        widgets = {
+            'paid_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+            'fee_start_date': forms.DateInput(
+                attrs={'type': 'date'},
+                format='%Y-%m-%d'
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FeePaymentForm, self).__init__(*args, **kwargs)
+        self.fields['paid_date'].input_formats = ['%Y-%m-%d']
+        self.fields['fee_start_date'].input_formats = ['%Y-%m-%d']
+        self.fields['package'].required = True
+        self.fields['amount'].required = True
+        self.fields['fee_start_date'].required = True
+
+    def clean(self):
+        cleaned_data = super().clean()
+        package = cleaned_data.get('package')
+        if package and not package.days:
+            self.add_error('package', 'Selected package must specify validity days.')
+        return cleaned_data
+

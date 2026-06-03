@@ -4,7 +4,8 @@ from .models import (
     Batch,
     FeePackage,
     Student,
-    Staff
+    Staff,
+    FeePayment
 )
 
 
@@ -32,6 +33,7 @@ class BatchAdmin(admin.ModelAdmin):
         'id',
         'name',
         'timing',
+        'class_days',
         'monthly_fee',
         'max_students',
         'is_active',
@@ -53,6 +55,7 @@ class FeePackageAdmin(admin.ModelAdmin):
         'id',
         'name',
         'days',
+        'class_days',
     )
 
     search_fields = (
@@ -66,6 +69,7 @@ class StudentAdmin(admin.ModelAdmin):
         'id',
         'name',
         'parent_name',
+        'parent_whatsapp',
         'phone',
         'batch',
         'belt',
@@ -84,3 +88,26 @@ class StudentAdmin(admin.ModelAdmin):
         'name',
         'phone',
     )
+
+
+@admin.register(FeePayment)
+class FeePaymentAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'student',
+        'package',
+        'amount',
+        'paid_date',
+        'fee_start_date',
+        'fee_end_date',
+        'created_at',
+    )
+
+    list_filter = (
+        'paid_date',
+        'package',
+    )
+
+    search_fields = (
+        'student__name',
+    )

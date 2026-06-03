@@ -112,4 +112,21 @@ urlpatterns = [
         name='batch_details'
     ),
 
-]
+    # PAYMENTS
+    path(
+        'pay-fee/<int:student_id>/',
+        views.pay_fee,
+        name='pay_fee'
+    ),
+    path(
+        'payment-history/<int:student_id>/',
+        views.payment_history,
+        name='payment_history'
+    ),
+    path(
+        'receipt/<int:payment_id>/',
+        views.receipt,
+        name='receipt'
+    ),
+
+]

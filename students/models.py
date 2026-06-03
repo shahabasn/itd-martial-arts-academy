@@ -16,6 +16,7 @@ class Staff(models.Model):
 class Batch(models.Model):
     name = models.CharField(max_length=100)
     timing = models.CharField(max_length=100)
+    class_days = models.CharField(max_length=100, blank=True, null=True)
     monthly_fee = models.IntegerField(default=0)
     max_students = models.IntegerField(default=20)
     is_active = models.BooleanField(default=True)
@@ -27,6 +28,7 @@ class Batch(models.Model):
 class FeePackage(models.Model):
     name = models.CharField(max_length=100)
     days = models.IntegerField()
+    class_days = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} - {self.days} days"
@@ -35,18 +37,22 @@ class FeePackage(models.Model):
 class Student(models.Model):
 
     BELT_CHOICES = [
-        ('White', 'White'),
+        ('Beginner', 'Beginner'),
         ('Yellow', 'Yellow'),
         ('Orange', 'Orange'),
         ('Green', 'Green'),
         ('Blue', 'Blue'),
-        ('Brown', 'Brown'),
+        ('Violet', 'Violet'),
+        ('Purple', 'Purple'),
+        ('Brown 1', 'Brown 1'),
+        ('Brown 2', 'Brown 2'),
         ('Black', 'Black'),
     ]
 
     name = models.CharField(max_length=100)
     age = models.IntegerField()
     parent_name = models.CharField(max_length=100, blank=True, null=True)
+    parent_whatsapp = models.CharField(max_length=15, blank=True, null=True)
     phone = models.CharField(max_length=15)
 
     address = models.TextField(
@@ -63,7 +69,7 @@ class Student(models.Model):
     belt = models.CharField(
         max_length=20,
         choices=BELT_CHOICES,
-        default='White'
+        default='Beginner'
     )
 
     batch = models.ForeignKey(
@@ -123,3 +129,25 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class FeePayment(models.Model):
+    student = models.ForeignKey(
+        Student,
+        on_delete=models.CASCADE,
+        related_name='payments'
+    )
+    package = models.ForeignKey(
+        FeePackage,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    amount = models.IntegerField()
+    paid_date = models.DateField()
+    fee_start_date = models.DateField()
+    fee_end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student.name} - {self.amount} on {self.paid_date}"

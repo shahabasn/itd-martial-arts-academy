@@ -3,14 +3,16 @@ from datetime import date, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
-from .models import Student, Batch, FeePackage, Staff
+from .models import Student, Batch, FeePackage, Staff, FeePayment
 
 from .forms import (
     StudentForm,
     BatchForm,
     FeePackageForm,
-    StaffLoginForm
+    StaffLoginForm,
+    FeePaymentForm
 )
+
 
 
 def staff_login(request):
@@ -265,3 +267,74 @@ def delete_fee_package(request, id):
     package.delete()
 
     return redirect('fee_packages')
+
+
+@staff_required
+def pay_fee(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+
+    if request.method == 'POST':
+        form = FeePaymentForm(request.POST)
+        if form.is_valid():
+            package = form.cleaned_data['package']
+            amount = form.cleaned_data['amount']
+            paid_date = form.cleaned_data['paid_date']
+            fee_start_date = form.cleaned_data['fee_start_date']
+
+            # Explicitly calculate fee_end_date using package validity days
+            fee_end_date = fee_start_date + timedelta(days=package.days)
+
+            # Update student profile
+            student.fee_package = package
+            student.fee_start_date = fee_start_date
+            student.fee_end_date = fee_end_date
+            student.save()
+
+            # Create FeePayment history record with explicitly calculated dates
+            payment = FeePayment.objects.create(
+                student=student,
+                package=package,
+                amount=amount,
+                paid_date=paid_date,
+                fee_start_date=fee_start_date,
+                fee_end_date=fee_end_date
+            )
+
+            return redirect('receipt', payment_id=payment.id)
+    else:
+        # Prefill default values
+        initial_data = {}
+        if student.fee_package:
+            initial_data['package'] = student.fee_package
+        initial_data['paid_date'] = date.today()
+        if student.fee_end_date:
+            initial_data['fee_start_date'] = student.fee_end_date
+        else:
+            initial_data['fee_start_date'] = date.today()
+        form = FeePaymentForm(initial=initial_data)
+
+    return render(request, 'students/pay_fee.html', {
+        'student': student,
+        'form': form
+    })
+
+
+
+@staff_required
+def payment_history(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    payments = FeePayment.objects.filter(student=student).order_by('-created_at')
+
+    return render(request, 'students/payment_history.html', {
+        'student': student,
+        'payments': payments
+    })
+
+
+@staff_required
+def receipt(request, payment_id):
+    payment = get_object_or_404(FeePayment, id=payment_id)
+
+    return render(request, 'students/receipt.html', {
+        'payment': payment
+    })
