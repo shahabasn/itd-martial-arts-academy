@@ -141,9 +141,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-from whitenoise.storage import CompressedStaticFilesStorage
+from django.contrib.staticfiles.storage import StaticFilesStorage
 
-class CustomStaticFilesStorage(CompressedStaticFilesStorage):
+class CustomStaticFilesStorage(StaticFilesStorage):
     pass
 
 # Storage definitions with local fallback
