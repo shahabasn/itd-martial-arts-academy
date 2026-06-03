@@ -1,1 +1,1 @@
-web: gunicorn --chdir backend karate_backend.wsgi:application
+web: gunicorn karate_backend.wsgi
