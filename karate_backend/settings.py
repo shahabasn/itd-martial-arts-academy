@@ -15,11 +15,6 @@ import os
 import dj_database_url
 import socket
 
-# Force Python socket to resolve to IPv4 only (bypasses Render IPv6 outbound connection issues with Supabase)
-orig_getaddrinfo = socket.getaddrinfo
-def getaddrinfo_ipv4_only(host, port, family=0, type=0, proto=0, flags=0):
-    return orig_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
-socket.getaddrinfo = getaddrinfo_ipv4_only
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
