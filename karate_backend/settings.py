@@ -193,5 +193,8 @@ else:
         "http://127.0.0.1:8000",
     ]
 
+# Filter out invalid origins to prevent Django system check errors (e.g. if '*' is set)
+CSRF_TRUSTED_ORIGINS = [origin for origin in CSRF_TRUSTED_ORIGINS if origin.startswith("http://") or origin.startswith("https://")]
+
 SESSION_COOKIE_SECURE = os.environ.get('SESSION_COOKIE_SECURE', 'True') == 'True'
 CSRF_COOKIE_SECURE = os.environ.get('CSRF_COOKIE_SECURE', 'True') == 'True'
