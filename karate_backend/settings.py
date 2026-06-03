@@ -94,6 +94,16 @@ if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
+    # Resolve host to IPv4 to prevent psycopg2 (libpq) from resolving to IPv6 on Render
+    try:
+        db_host = DATABASES['default'].get('HOST')
+        if db_host:
+            ipv4_address = socket.gethostbyname(db_host)
+            if 'OPTIONS' not in DATABASES['default']:
+                DATABASES['default']['OPTIONS'] = {}
+            DATABASES['default']['OPTIONS']['hostaddr'] = ipv4_address
+    except Exception as e:
+        print(f"Failed to resolve database hostname to IPv4: {e}")
 else:
     DATABASES = {
         'default': {
