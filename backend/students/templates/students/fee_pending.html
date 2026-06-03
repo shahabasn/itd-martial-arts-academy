@@ -1,0 +1,540 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/static/images/icon.png">
+<link
+rel="manifest"
+href="/static/manifest.json">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fee Pending – ITD Martial Arts Academy (Kadappadi)</title>
+  <link rel="apple-touch-icon" href="/static/images/icon.png">
+  <meta name="theme-color" content="#1A1A1A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #C0392B;
+      --red-dark: #922B21;
+      --red-light: #FADBD8;
+      --gold: #D4AC0D;
+      --gold-light: #FEF9E7;
+      --black: #1A1A1A;
+      --surface: #FFFFFF;
+      --bg: #F7F5F0;
+      --border: #E8E2D9;
+      --text-main: #1A1A1A;
+      --text-muted: #7B7166;
+      --radius: 14px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+      --orange: #E67E22;
+      --orange-light: #FEF0E6;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .site-header {
+      background: var(--black);
+      padding: 0 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .belt-icon { width: 32px; height: 32px; }
+
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .brand-title span { color: var(--gold); }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #AAAAAA;
+      background: none;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 6px 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .back-btn svg { width: 14px; height: 14px; }
+    .back-btn:hover { color: #fff; border-color: #666; }
+
+    /* ── Alert banner ── */
+    .alert-banner {
+      background: var(--black);
+      padding: 0 1.25rem 1.25rem;
+    }
+
+    .alert-inner {
+      background: #2A1A1A;
+      border: 1px solid #5A2020;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .alert-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .alert-icon svg { width: 18px; height: 18px; }
+
+    .alert-text p:first-child {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #F1948A;
+      margin-bottom: 2px;
+    }
+
+    .alert-text p:last-child {
+      font-size: 0.78rem;
+      color: #888;
+    }
+
+    /* ── Section head ── */
+    .section-head {
+      padding: 1rem 1.25rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-head h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .pending-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--red);
+      background: var(--red-light);
+      padding: 3px 10px;
+      border-radius: 50px;
+    }
+
+    /* ── Cards ── */
+    .cards-list {
+      padding: 0 1.25rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .student-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .student-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.11);
+    }
+
+    /* Urgency left bar — red if overdue, orange if expiring soon */
+    .student-card.overdue::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--red);
+    }
+
+    .student-card.expiring::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--orange);
+    }
+
+    .card-body {
+      padding: 1rem 1rem 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Urgency avatar ring */
+    .avatar-initials {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+    }
+
+    .overdue .avatar-initials {
+      background: var(--red-light);
+      color: var(--red-dark);
+    }
+
+    .expiring .avatar-initials {
+      background: var(--orange-light);
+      color: #7D3C00;
+    }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .card-info .name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+
+    .meta-chip svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    /* Fee date chips */
+    .fee-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 3px 10px;
+    }
+
+    .fee-chip svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+    .fee-chip.overdue-chip {
+      background: var(--red-light);
+      color: var(--red-dark);
+      border: 1px solid #F09595;
+    }
+
+    .fee-chip.expiring-chip {
+      background: var(--orange-light);
+      color: #7D3C00;
+      border: 1px solid #F5CBA7;
+    }
+
+    /* Status tag top-right */
+    .status-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 50px;
+    }
+
+    .card-actions {
+      border-top: 1px solid var(--border);
+      display: flex;
+      width: 100%;
+    }
+
+    .action-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      background: none;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .action-btn svg { width: 15px; height: 15px; }
+    .action-btn:hover { background: var(--bg); }
+
+
+    .status-tag.overdue-tag {
+      background: var(--red-light);
+      color: var(--red-dark);
+    }
+
+    .status-tag.expiring-tag {
+      background: var(--orange-light);
+      color: #7D3C00;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      opacity: 0.2;
+    }
+
+    .empty-state .title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .empty-state p { font-size: 0.85rem; }
+
+    /* ── Responsive ── */
+    @media (min-width: 600px) {
+      .cards-list {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      .student-card::before {
+        top: 0; left: 0; right: 0; bottom: auto;
+        width: auto; height: 4px;
+      }
+    }
+
+    @media (min-width: 960px) {
+      .site-header { padding: 0 2rem; }
+      .alert-banner { padding: 0 2rem 1.25rem; }
+      .section-head { padding: 1rem 2rem 0.75rem; }
+      .cards-list {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 0 2rem 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <a href="/" class="brand">
+      <img src="/static/images/icon.png" class="belt-icon" alt="Logo" style="object-fit: contain; border-radius: 6px; box-shadow: 0 2px 8px rgba(212, 172, 13, 0.45);">
+      <span class="brand-title">ITD Martial Arts <span>Academy (Kadappadi)</span></span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <a href="/" class="back-btn">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M9 2L4 7l5 5"/>
+        </svg>
+        Back
+      </a>
+      <form method="POST" action="/logout/" onsubmit="return confirm('Logout?')" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="logout-btn" style="cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; color: #AAAAAA; background: none; border: 1px solid #333; border-radius: 8px; padding: 6px 14px; transition: all 0.2s;">Logout</button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Alert banner -->
+  <div class="alert-banner">
+    <div class="alert-inner">
+      <div class="alert-icon">
+        <svg viewBox="0 0 18 18" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 2L1.5 15h15L9 2z"/>
+          <path d="M9 7v4M9 13h.01"/>
+        </svg>
+      </div>
+      <div class="alert-text">
+        <p>Fee collection required</p>
+        <p>Students below have expired or expiring fees — contact them promptly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section head -->
+  <div class="section-head">
+    <h2>Pending Students</h2>
+    {% if students %}
+      <span class="pending-count">{{ students|length }} pending</span>
+    {% endif %}
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-list">
+    {% for student in students %}
+
+      <div class="student-card {% if student.is_fee_expired %}overdue{% elif student.is_fee_expiring %}expiring{% endif %}">
+
+        {% if student.is_fee_expired %}
+          <span class="status-tag overdue-tag">Expired</span>
+        {% elif student.is_fee_expiring %}
+          <span class="status-tag expiring-tag">Expiring Soon</span>
+        {% else %}
+          <span class="status-tag active-tag" style="background: #EAF3DE; color: #27500A; border: 1px solid #C0DD97;">Active</span>
+        {% endif %}
+
+        <div class="card-body">
+
+          {% if student.photo %}
+            <img src="{{ student.photo.url }}" alt="{{ student.name }}" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--bg); border: 2px solid var(--border); box-shadow: var(--shadow);">
+          {% else %}
+            <div class="avatar-initials">{{ student.name|first|upper }}</div>
+          {% endif %}
+
+          <div class="card-info">
+            <p class="name">{{ student.name }}</p>
+            <div class="card-meta">
+
+              <span class="meta-chip">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M2 3.5A1.5 1.5 0 013.5 2h5A1.5 1.5 0 0110 3.5v5A1.5 1.5 0 018.5 10h-5A1.5 1.5 0 012 8.5v-5z"/>
+                  <path d="M2 5h8M5 2v8"/>
+                </svg>
+                {{ student.phone }}
+              </span>
+
+              <span class="meta-chip">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="1.5" y="2" width="9" height="8" rx="1"/>
+                  <path d="M4 5h4M4 7.5h2.5"/>
+                </svg>
+                {{ student.batch }}
+              </span>
+
+              {% if student.parent_name %}
+              <span class="meta-chip">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM1.5 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg>
+                Parent: {{ student.parent_name }}
+              </span>
+              {% endif %}
+
+              {% if student.parent_whatsapp %}
+              <span class="meta-chip" style="background-color: #E8F5E9; border-color: #A5D6A7; color: #2E7D32;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 11px; height: 11px; color: #2E7D32;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+                WhatsApp: {{ student.parent_whatsapp }}
+              </span>
+              {% endif %}
+
+              <span class="fee-chip {% if student.is_fee_expired %}overdue-chip{% elif student.is_fee_expiring %}expiring-chip{% else %}active-chip{% endif %}">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="1.5" y="2" width="9" height="8.5" rx="1"/>
+                  <path d="M4 1v2M8 1v2M1.5 5h9"/>
+                </svg>
+                Ends: {{ student.fee_end_date }}
+              </span>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          {% if student.parent_whatsapp %}
+          <a href="https://wa.me/91{{ student.parent_whatsapp }}?text=Hello%2C%20your%20child%20{{ student.name|urlencode }}%27s%20karate%20fee%20is%20pending%20at%20ITD%20Martial%20Arts%20Academy%20%28Kadappadi%29.%20Please%20complete%20the%20payment." 
+             target="_blank" class="action-btn" style="color: #25D366; border-right: 1px solid var(--border); text-decoration: none; font-weight: bold;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 15px; height: 15px; vertical-align: middle;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            WhatsApp Reminder
+          </a>
+          {% endif %}
+          <a href="/pay-fee/{{ student.id }}/" class="action-btn" style="color: #27AE60; text-decoration: none; font-weight: bold;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 15px; height: 15px; vertical-align: middle;"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="10" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Pay Fee
+          </a>
+        </div>
+
+      </div>
+
+
+    {% empty %}
+
+      <div class="empty-state" style="grid-column:1/-1">
+        <svg class="empty-icon" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="27" r="10" stroke="#1A1A1A" stroke-width="2"/>
+          <path d="M10 54c0-12 10-19 22-19s22 7 22 19" stroke="#1A1A1A" stroke-width="2"/>
+          <path d="M42 18l6 6M48 18l-6 6" stroke="#27AE60" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <p class="title">All fees are clear!</p>
+        <p>No students with pending or overdue fees.</p>
+      </div>
+
+    {% endfor %}
+  </div>
+
+</body>
+</html>
