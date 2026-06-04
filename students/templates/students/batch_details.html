@@ -222,6 +222,11 @@ href="/static/manifest.json">
                         📅 Admission:
                         {{ student.admission_date }}
                     </p>
+                    {% if student.police_station %}
+                    <p>
+                        🛡️ Police Station: {{ student.police_station.name }}
+                    </p>
+                    {% endif %}
 
 
                     <div class="fee-box">

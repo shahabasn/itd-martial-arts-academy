@@ -538,6 +538,12 @@ href="/static/manifest.json">
 
               <span class="belt-badge">{{ student.belt }}</span>
 
+              {% if student.police_station %}
+              <span class="meta-chip" style="background-color: #FADBD8; border-color: #F1948A; color: #78281F;">
+                🛡️ {{ student.police_station.name }}
+              </span>
+              {% endif %}
+
               <span class="fee-chip {% if student.fee_end_date %}{% now "Y-m-d" as today %}{% if student.fee_end_date|date:"Y-m-d" < today %}expired{% endif %}{% endif %}">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
                   <rect x="1.5" y="2" width="9" height="8.5" rx="1"/>
@@ -550,27 +556,27 @@ href="/static/manifest.json">
           </div>
         </div>
 
-        <!-- Fee actions -->
+        <!-- Actions -->
         <div class="card-actions" style="border-top: 1px solid var(--border);">
-          <a href="/pay-fee/{{ student.id }}/" class="action-btn pay" style="color: #27AE60; border-right: 1px solid var(--border); text-decoration: none;">
+          <a href="/student-details/{{ student.id }}/" class="action-btn view-details" style="color: #2980B9; border-right: 1px solid var(--border); text-decoration: none; font-weight: bold;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            Details
+          </a>
+          <a href="/pay-fee/{{ student.id }}/" class="action-btn pay" style="color: #27AE60; text-decoration: none; font-weight: bold;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
               <rect x="2" y="4" width="20" height="16" rx="2"/>
               <line x1="12" y1="10" x2="12" y2="16"/>
               <line x1="8" y1="12" x2="16" y2="12"/>
             </svg>
-            Pay Fee
-          </a>
-          <a href="/payment-history/{{ student.id }}/" class="action-btn history" style="color: #8E44AD; text-decoration: none;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
-              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            History
+            Pay / Renew
           </a>
         </div>
 
-        <!-- Edit / Delete actions -->
         <div class="card-actions" style="border-top: 1px solid var(--border);">
-          <a href="/edit-student/{{ student.id }}/" class="action-btn edit" style="text-decoration: none;">
+          <a href="/edit-student/{{ student.id }}/" class="action-btn edit" style="text-decoration: none; border-right: 1px solid var(--border);">
             <svg viewBox="0 0 15 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <path d="M10.5 2.5l2 2L5 12H3v-2L10.5 2.5z"/>
             </svg>

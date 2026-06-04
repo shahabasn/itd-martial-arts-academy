@@ -128,5 +128,32 @@ urlpatterns = [
         views.receipt,
         name='receipt'
     ),
+    # STUDENT DETAILS
+    path(
+        'student-details/<int:id>/',
+        views.student_details,
+        name='student_details'
+    ),
+    # POLICE STATIONS
+    path(
+        'police-stations/',
+        views.police_stations,
+        name='police_stations'
+    ),
+    path(
+        'add-police-station/',
+        views.add_police_station,
+        name='add_police_station'
+    ),
+    path(
+        'edit-police-station/<int:id>/',
+        views.edit_police_station,
+        name='edit_police_station'
+    ),
+    path(
+        'delete-police-station/<int:id>/',
+        views.delete_police_station,
+        name='delete_police_station'
+    ),
 
 ]

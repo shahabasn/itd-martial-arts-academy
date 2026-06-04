@@ -5,7 +5,8 @@ from .models import (
     Batch,
     FeePackage,
     Staff,
-    FeePayment
+    FeePayment,
+    PoliceStation
 )
 
 
@@ -53,6 +54,14 @@ class StudentForm(forms.ModelForm):
 
         self.fields['admission_date'].input_formats = ['%Y-%m-%d']
         self.fields['fee_start_date'].input_formats = ['%Y-%m-%d']
+        self.fields['police_station'].queryset = PoliceStation.objects.filter(is_active=True)
+
+
+class PoliceStationForm(forms.ModelForm):
+
+    class Meta:
+        model = PoliceStation
+        fields = '__all__'
 
 class BatchForm(forms.ModelForm):
 

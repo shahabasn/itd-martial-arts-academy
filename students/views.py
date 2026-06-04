@@ -3,14 +3,15 @@ from datetime import date, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 
-from .models import Student, Batch, FeePackage, Staff, FeePayment
+from .models import Student, Batch, FeePackage, Staff, FeePayment, PoliceStation
 
 from .forms import (
     StudentForm,
     BatchForm,
     FeePackageForm,
     StaffLoginForm,
-    FeePaymentForm
+    FeePaymentForm,
+    PoliceStationForm
 )
 
 
@@ -337,4 +338,69 @@ def receipt(request, payment_id):
 
     return render(request, 'students/receipt.html', {
         'payment': payment
-    })
+    })
+
+
+@staff_required
+def student_details(request, id):
+    student = get_object_or_404(Student, id=id)
+    payments = FeePayment.objects.filter(student=student).order_by('-created_at')
+
+    if student.is_fee_expired():
+        status = 'Expired'
+    elif student.is_fee_expiring():
+        status = 'Expiring Soon'
+    else:
+        status = 'Active'
+
+    return render(request, 'students/student_details.html', {
+        'student': student,
+        'payments': payments,
+        'status': status,
+    })
+
+
+@staff_required
+def police_stations(request):
+    stations = PoliceStation.objects.all()
+    return render(request, 'students/police_stations.html', {
+        'stations': stations
+    })
+
+
+@staff_required
+def add_police_station(request):
+    form = PoliceStationForm()
+
+    if request.method == 'POST':
+        form = PoliceStationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('police_stations')
+
+    return render(request, 'students/add_police_station.html', {
+        'form': form
+    })
+
+
+@staff_required
+def edit_police_station(request, id):
+    station = get_object_or_404(PoliceStation, id=id)
+    form = PoliceStationForm(instance=station)
+
+    if request.method == 'POST':
+        form = PoliceStationForm(request.POST, instance=station)
+        if form.is_valid():
+            form.save()
+            return redirect('police_stations')
+
+    return render(request, 'students/edit_police_station.html', {
+        'form': form
+    })
+
+
+@staff_required
+def delete_police_station(request, id):
+    station = get_object_or_404(PoliceStation, id=id)
+    station.delete()
+    return redirect('police_stations')

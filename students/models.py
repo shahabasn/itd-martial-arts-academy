@@ -34,6 +34,14 @@ class FeePackage(models.Model):
         return f"{self.name} - {self.days} days"
 
 
+class PoliceStation(models.Model):
+    name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Student(models.Model):
 
     BELT_CHOICES = [
@@ -58,6 +66,21 @@ class Student(models.Model):
     address = models.TextField(
         blank=True,
         null=True
+    )
+    second_address = models.TextField(
+        blank=True,
+        null=True
+    )
+    aadhaar_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+    police_station = models.ForeignKey(
+        PoliceStation,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
 
     photo = models.ImageField(
@@ -150,4 +173,4 @@ class FeePayment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.student.name} - {self.amount} on {self.paid_date}"
+        return f"{self.student.name} - {self.amount} on {self.paid_date}"

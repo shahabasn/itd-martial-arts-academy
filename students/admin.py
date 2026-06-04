@@ -5,7 +5,8 @@ from .models import (
     FeePackage,
     Student,
     Staff,
-    FeePayment
+    FeePayment,
+    PoliceStation
 )
 
 
@@ -71,10 +72,11 @@ class StudentAdmin(admin.ModelAdmin):
         'parent_name',
         'parent_whatsapp',
         'phone',
+        'aadhaar_number',
+        'police_station',
         'batch',
         'belt',
         'fee_package',
-        'fee_start_date',
         'fee_end_date',
     )
 
@@ -86,7 +88,28 @@ class StudentAdmin(admin.ModelAdmin):
 
     search_fields = (
         'name',
+        'parent_name',
+        'parent_whatsapp',
         'phone',
+        'aadhaar_number',
+        'police_station__name',
+    )
+
+
+@admin.register(PoliceStation)
+class PoliceStationAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'is_active',
+    )
+
+    list_filter = (
+        'is_active',
+    )
+
+    search_fields = (
+        'name',
     )
 
 
