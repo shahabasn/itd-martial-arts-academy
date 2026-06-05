@@ -18,7 +18,7 @@ media/
 karate-management/backend/media/
 
 # Static collected
-staticfiles/
+# staticfiles/
 karate-management/backend/staticfiles/
 
 # IDE / OS files
