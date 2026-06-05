@@ -403,4 +403,33 @@ def edit_police_station(request, id):
 def delete_police_station(request, id):
     station = get_object_or_404(PoliceStation, id=id)
     station.delete()
-    return redirect('police_stations')
+    return redirect('police_stations')
+
+
+@staff_required
+def delete_payment(request, payment_id):
+    payment = get_object_or_404(FeePayment, id=payment_id)
+    student = payment.student
+    
+    # Delete payment record
+    payment.delete()
+    
+    # Recalculate student fee dates using the latest remaining payment
+    remaining_payments = student.payments.all().order_by('-created_at')
+    if remaining_payments.exists():
+        latest = remaining_payments.first()
+        student.fee_package = latest.package
+        student.fee_start_date = latest.fee_start_date
+        student.fee_end_date = latest.fee_end_date
+    else:
+        student.fee_package = None
+        student.fee_start_date = student.admission_date
+        student.fee_end_date = None
+    
+    student.save()
+    
+    # Redirect back to referer if appropriate, otherwise to student details
+    referer = request.META.get('HTTP_REFERER')
+    if referer and ('payment-history' in referer or 'student-details' in referer) and 'receipt' not in referer:
+        return redirect(referer)
+    return redirect('student_details', id=student.id)

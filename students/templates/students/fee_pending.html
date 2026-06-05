@@ -8,7 +8,7 @@ rel="manifest"
 href="/static/manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fee Pending – ITD Martial Arts Academy (Kadappadi)</title>
+  <title>Fee Pending – ITD Martial Arts Academy ({{ BRANCH_NAME }})</title>
   <link rel="apple-touch-icon" href="/static/images/icon.png">
   <meta name="theme-color" content="#1A1A1A">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,7 +396,7 @@ href="/static/manifest.json">
   <header class="site-header">
     <a href="/" class="brand">
       <img src="/static/images/icon.png" class="belt-icon" alt="Logo" style="object-fit: contain; border-radius: 6px; box-shadow: 0 2px 8px rgba(212, 172, 13, 0.45);">
-      <span class="brand-title">ITD Martial Arts <span>Academy (Kadappadi)</span></span>
+      <span class="brand-title">ITD Martial Arts <span>Academy ({{ BRANCH_NAME }})</span></span>
     </a>
     <div style="display: flex; align-items: center; gap: 10px;">
       <a href="/" class="back-btn">
@@ -519,7 +519,7 @@ href="/static/manifest.json">
         </div>
         {% if student.parent_whatsapp %}
         <div class="card-actions" style="border-top: 1px solid var(--border);">
-          <a href="https://wa.me/91{{ student.parent_whatsapp }}?text=Hello%2C%20your%20child%20{{ student.name|urlencode }}%27s%20karate%20fee%20is%20pending%20at%20ITD%20Martial%20Arts%20Academy%20%28Kadappadi%29.%20Please%20complete%20the%20payment." 
+          <a href="https://wa.me/91{{ student.parent_whatsapp }}?text=Hello%2C%20your%20child%20{{ student.name|urlencode }}%27s%20karate%20fee%20is%20pending%20at%20ITD%20Martial%20Arts%20Academy%20%28{{ BRANCH_NAME }}%29.%20Please%20complete%20the%20payment." 
              target="_blank" class="action-btn" style="color: #25D366; text-decoration: none; font-weight: bold;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 15px; height: 15px; vertical-align: middle;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
             WhatsApp Reminder

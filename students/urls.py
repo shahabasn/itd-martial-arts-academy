@@ -128,6 +128,11 @@ urlpatterns = [
         views.receipt,
         name='receipt'
     ),
+    path(
+        'delete-payment/<int:payment_id>/',
+        views.delete_payment,
+        name='delete_payment'
+    ),
     # STUDENT DETAILS
     path(
         'student-details/<int:id>/',
