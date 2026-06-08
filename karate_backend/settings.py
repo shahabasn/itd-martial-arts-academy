@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file if it exists
 env_file = BASE_DIR / '.env'
 if env_file.exists():
-    with open(env_file, 'r', encoding='utf-8') as f:
+    with open(env_file, 'r', encoding='utf-8-sig') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#'):
