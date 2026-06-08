@@ -340,6 +340,12 @@
           <span class="label">Student Name:</span>
           <span class="value">{{ payment.student.name }}</span>
         </div>
+        {% if payment.student.roll_number %}
+        <div class="row">
+          <span class="label">Roll No:</span>
+          <span class="value">{{ payment.student.roll_number }}</span>
+        </div>
+        {% endif %}
         {% if payment.student.parent_name %}
         <div class="row">
           <span class="label">Parent Name:</span>

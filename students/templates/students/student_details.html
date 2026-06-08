@@ -517,6 +517,10 @@
       <div class="info-card">
         <h3 class="info-card-title">Academy & Batch</h3>
         <div class="detail-row">
+          <span class="detail-label">Roll Number:</span>
+          <span class="detail-value" style="color: var(--red); font-weight: bold;">{{ student.roll_number|default:"N/A" }}</span>
+        </div>
+        <div class="detail-row">
           <span class="detail-label">Parent / Guardian:</span>
           <span class="detail-value">{{ student.parent_name|default:"N/A" }}</span>
         </div>
