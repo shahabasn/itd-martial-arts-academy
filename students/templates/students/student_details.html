@@ -457,6 +457,9 @@
 
         <div class="profile-info">
           <h2 class="student-name">{{ student.name }}</h2>
+          {% if student.roll_number %}
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin-top: -4px; margin-bottom: 8px;">Roll No: {{ student.roll_number }}</p>
+          {% endif %}
           <span class="belt-badge">{{ student.belt }}</span>
           <span class="status-badge status-{{ status }}">{{ status }}</span>
           

@@ -188,6 +188,11 @@ href="/static/manifest.json">
                             {{ student.name }}
 
                         </div>
+                        {% if student.roll_number %}
+                            <div class="roll-number" style="font-size: 14px; color: #666; margin-top: 2px;">
+                                Roll No: {{ student.roll_number }}
+                            </div>
+                        {% endif %}
 
                         <div class="belt">
 

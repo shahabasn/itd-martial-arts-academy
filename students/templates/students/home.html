@@ -546,9 +546,15 @@ style="display:inline;">
 
           <div class="card-info">
             <p class="name">{{ student.name }}</p>
+            {% if student.roll_number %}
+              <p class="roll-number" style="font-size: 0.82rem; color: var(--text-muted); margin-top: -2px; margin-bottom: 5px;">Roll No: {{ student.roll_number }}</p>
+            {% endif %}
             <div class="card-meta">
               <span class="meta-chip">
-                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 1a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM1.5 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4"/></svg>
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M2 3.5c0-.83.67-1.5 1.5-1.5h5C9.33 2 10 2.67 10 3.5v5c0 .83-.67 1.5-1.5 1.5h-5C2.67 10 2 9.33 2 8.5v-5z"/>
+                  <path d="M2 5h8M5 2v8"/>
+                </svg>
                 {{ student.phone }}
               </span>
               {% if student.parent_name %}

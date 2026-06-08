@@ -500,6 +500,9 @@ href="/static/manifest.json">
 
           <div class="card-info">
             <p class="name">{{ student.name }}</p>
+            {% if student.roll_number %}
+              <p class="roll-number" style="font-size: 0.82rem; color: var(--text-muted); margin-top: -2px; margin-bottom: 5px;">Roll No: {{ student.roll_number }}</p>
+            {% endif %}
             <div class="card-meta">
 
               <span class="meta-chip">
@@ -544,12 +547,12 @@ href="/static/manifest.json">
               </span>
               {% endif %}
 
-              <span class="fee-chip {% if student.fee_end_date %}{% now "Y-m-d" as today %}{% if student.fee_end_date|date:"Y-m-d" < today %}expired{% endif %}{% endif %}">
+              <span class="fee-chip {% if student.is_fee_expired %}expired{% endif %}">
                 <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
                   <rect x="1.5" y="2" width="9" height="8.5" rx="1"/>
                   <path d="M4 1v2M8 1v2M1.5 5h9"/>
                 </svg>
-                {{ student.fee_end_date }}
+                {{ student.fee_end_date|default:"None" }}
               </span>
 
             </div>

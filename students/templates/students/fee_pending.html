@@ -460,6 +460,9 @@ href="/static/manifest.json">
 
           <div class="card-info">
             <p class="name">{{ student.name }}</p>
+            {% if student.roll_number %}
+              <p class="roll-number" style="font-size: 0.82rem; color: var(--text-muted); margin-top: -2px; margin-bottom: 5px;">Roll No: {{ student.roll_number }}</p>
+            {% endif %}
             <div class="card-meta">
 
               <span class="meta-chip">

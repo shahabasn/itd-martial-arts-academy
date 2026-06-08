@@ -68,6 +68,7 @@ class FeePackageAdmin(admin.ModelAdmin):
 class StudentAdmin(admin.ModelAdmin):
     list_display = (
         'id',
+        'roll_number',
         'name',
         'parent_name',
         'parent_whatsapp',
@@ -88,6 +89,7 @@ class StudentAdmin(admin.ModelAdmin):
 
     search_fields = (
         'name',
+        'roll_number',
         'parent_name',
         'parent_whatsapp',
         'phone',
