@@ -79,7 +79,7 @@ def home(request):
 
     if query:
         students = Student.objects.filter(
-            Q(name__icontains=query) | Q(parent_name__icontains=query)
+            Q(name__icontains=query) | Q(parent_name__icontains=query) | Q(roll_number__icontains=query)
         )
 
     return render(request, 'students/home.html', {
@@ -94,7 +94,7 @@ def students_list(request):
 
     if query:
         students = students.filter(
-            Q(name__icontains=query) | Q(parent_name__icontains=query)
+            Q(name__icontains=query) | Q(parent_name__icontains=query) | Q(roll_number__icontains=query)
         )
 
     return render(request, 'students/students.html', {

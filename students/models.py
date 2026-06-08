@@ -58,7 +58,11 @@ class Student(models.Model):
     ]
 
     name = models.CharField(max_length=100)
-    roll_number = models.CharField(max_length=50, blank=True, null=True)
+    roll_number = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
     age = models.IntegerField()
     parent_name = models.CharField(max_length=100, blank=True, null=True)
     parent_whatsapp = models.CharField(max_length=15, blank=True, null=True)
