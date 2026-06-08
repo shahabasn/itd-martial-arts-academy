@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file if it exists
 env_file = BASE_DIR / '.env'
 if env_file.exists():
-    with open(env_file, 'r', encoding='utf-8') as f:
+    with open(env_file, 'r', encoding='utf-8-sig') as f:
         for line in f:
             line = line.strip()
             if line and not line.startswith('#'):
@@ -164,6 +164,9 @@ USE_TZ = True
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if render_host:
+    ALLOWED_HOSTS.append(render_host)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
